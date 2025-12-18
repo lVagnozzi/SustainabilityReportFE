@@ -1,56 +1,115 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eni for 2024 - Portale Sostenibilità</title>
-    <link rel="stylesheet" href="app.css">
-</head>
-<body>
+<header>
+    <div class="container">
+        <img src="https://www.eni.com/content/dam/enicom/images/loghi/logoEni.svg" class="eni-logo">
+        <div class="logo">Eni <span class="highlight">Sustainability</span></div>
+        <h1>A Just Transition</h1>
+        <p>Report e Documenti di Sostenibilità - Settore Secondario</p>
+    </div>
+</header>
 
-    <header>
-        <div class="container">
-            <img src="src/assets/logo-eni.svg" class="eni-logo">
-            <div class="logo">Eni <span class="highlight">Sustainability</span></div>
-            <h1>A Just Transition</h1>
-            <p>Report e Documenti di Sostenibilità - Settore Secondario</p>
+<main class="container">
+    <section class="intro">
+        <h2>Il nostro impegno per il 2050</h2>
+        <p>
+            Eni è impegnata in una trasformazione irreversibile verso la neutralità carbonica.
+            In questa pagina rendiamo accessibili agli stakeholder i documenti che testimoniano
+            i progressi fatti nella riduzione delle emissioni (Scope 1, 2 e 3) e nello sviluppo
+            di nuove energie tramite Plenitude e Versalis.
+        </p>
+    </section>
+
+    <section class="report-grid">
+        <div class="report-card">
+            <div class="card-icon">📄</div>
+            <h3>Eni for 2024</h3>
+            <p class="desc">A Just Transition - Executive Summary.</p>
+            <a href="#" class="btn-download" download>Scarica PDF</a>
+            <div class="archive-link-wrapper">
+                <a class="link-archive" (click)="openDownloadModal()">Vedi anni precedenti</a>
+            </div>
         </div>
-    </header>
 
-    <main class="container">
-        
-        <section class="intro">
-            <h2>Il nostro impegno per il 2050</h2>
-            <p>
-                Eni è impegnata in una trasformazione irreversibile verso la neutralità carbonica. 
-                In questa pagina rendiamo accessibili agli stakeholder i documenti che testimoniano 
-                i progressi fatti nella riduzione delle emissioni (Scope 1, 2 e 3) e nello sviluppo 
-                di nuove energie tramite Plenitude e Versalis.
+        <div class="report-card">
+            <div class="card-icon">⬆️</div>
+            <h3>Upload Report</h3>
+            <p class="desc">Upload report per uno specifico anno.</p>
+            <button type="button" (click)="openModal()" class="btn-upload">
+                Upload PDF (MAX 20MB)
+            </button>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2025 Eni S.p.A. - Progetto di Informatica per le Aziende Digitali</p>
+</footer>
+
+@if (isModalOpen) {
+<div class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Carica Documento</h2>
+            <span class="close-btn" (click)="closeModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Anno:</label>
+                <input type="number" [(ngModel)]="yearToUpload">
+            </div>
+            <div class="form-group">
+                <label>File:</label>
+                <input type="file" (change)="onFileSelected($event)">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" (click)="closeModal()">Annulla</button>
+            <button class="btn-confirm" (click)="onUpload()">Conferma</button>
+        </div>
+    </div>
+</div>
+}
+
+@if (isDownloadModalOpen) {
+<div class="modal-overlay">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h2>Archivio Report</h2>
+            <span class="close-btn" (click)="closeDownloadModal()">&times;</span>
+        </div>
+
+        <div class="modal-body">
+            <p style="margin-bottom: 20px; color: #666;">
+                Seleziona l'anno di cui vuoi scaricare il bilancio di sostenibilità.
             </p>
-        </section>
 
-        <section class="report-grid">
-            
-            <div class="report-card">
-                <div class="card-icon">📄</div>
-                <h3>Eni for 2024</h3>
-                <p class="desc">A Just Transition - Executive Summary. Include i dati su CCS Ravenna.</p>
-                <a href="#" class="btn-download" download>Scarica PDF (10MB)</a>
+            <div class="form-group">
+                <label for="archiveYear">Seleziona Anno:</label>
+                <select id="archiveYear" [(ngModel)]="archiveYear" class="input-styled">
+                    @for (year of availableYears; track year) {
+                        <option [ngValue]="year">{{ year }}</option>
+                    }
+
+                    @if (availableYears.length === 0) {
+                        <option [ngValue]="null" disabled>Nessun report trovato</option>
+                    }
+                </select>
             </div>
 
-            <div class="report-card">
-                <div class="card-icon">⬆️</div>
-                <h3>Upload Report</h3>
-                <p class="desc">Upload report per uno specifico anno.</p>
-                <a href="#" class="btn-upload" download>Upload PDF (MAX 20MB)</a>
+            @if (message) {
+            <div class="status-msg" [class.error]="message.includes('Errore')">
+                {{ message }}
             </div>
+            }
+        </div>
 
-        </section>
-    </main>
+        <div class="modal-footer">
+            <button class="btn-cancel" (click)="closeDownloadModal()">Chiudi</button>
+            <button class="btn-confirm" (click)="onDownloadArchive()">
+                Scarica Report
+            </button>
+        </div>
 
-    <footer>
-        <p>&copy; 2025 Eni S.p.A. - Progetto Didattico Informatica per le Aziende Digitali.</p>
-    </footer>
-
-</body>
-</html>
+    </div>
+</div>
+}

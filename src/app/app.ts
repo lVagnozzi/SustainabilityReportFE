@@ -1,26 +1,113 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, signal, ChangeDetectorRef } from '@angular/core';
 import { ReportService } from './ReportService';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
+const baseUrl = 'http://localhost:8080/api/reports';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [CommonModule, FormsModule],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
+
 export class App {
+
   protected readonly title = signal('SustainabilityReportFE');
 
   selectedFile: File | null = null;
   yearToUpload: number = 2024; // Default
   yearToDownload: number = 2024;
   message: string = '';
+  isModalOpen: boolean = false;
+  isDownloadModalOpen: boolean = false;
+  archiveYear: number = 2023;
+  availableYears: number[] = [];
 
-  constructor(private reportService: ReportService) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private reportService: ReportService) { }
 
   // Gestisce la selezione del file dall'input HTML
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
+  }
+
+  openModal() {
+    this.isModalOpen = true;
+    this.message = '';
+  }
+  closeModal() {
+    this.isModalOpen = false;
+    this.selectedFile = null;
+    this.message = '';
+  }
+
+  // Aggiungi una variabile per gestire lo spinner/loading
+isLoading: boolean = false;
+
+// app.ts
+
+openDownloadModal() {
+    this.isDownloadModalOpen = true;
+    this.message = 'Caricamento...';
+    this.availableYears = [];
+
+    this.reportService.getAvailableYears().subscribe({
+      next: (years: number[]) => { // <--- Ora ricevi direttamente numeri!
+        
+        // 1. FILTRA E BASTA (Niente più .map)
+        const filteredYears = years.filter(y => y !== 2024);
+
+        // 2. Rimuovi duplicati (sempre buona norma) e assegna
+        this.availableYears = [...new Set(filteredYears)];
+
+        // 3. Seleziona il primo di default
+        if (this.availableYears.length > 0) {
+          this.archiveYear = this.availableYears[0];
+        }
+
+        this.message = '';
+        this.cdr.detectChanges(); // Sempre utile per aggiornare subito la UI
+      },
+      error: (err) => {
+        console.error(err);
+        this.message = 'Errore nel caricamento.';
+        this.cdr.detectChanges();
+      }
+    });
+}
+
+  // 2. CHIUDE IL MODAL ARCHIVIO
+  closeDownloadModal() {
+    this.isDownloadModalOpen = false;
+    this.message = '';
+  }
+
+
+
+  // 3. SCARICA IL REPORT DALL'ARCHIVIO
+  onDownloadArchive() {
+    this.reportService.downloadReport(this.archiveYear).subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Eni_Sustainability_Report-${this.archiveYear}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+
+        this.message = `Download del ${this.archiveYear} avviato!`;
+        this.closeDownloadModal(); // Chiude il modal dopo il click
+      },
+      error: (err) => {
+        console.error(err);
+        this.message = `Errore: Report del ${this.archiveYear} non disponibile.`;
+      }
+    });
   }
 
   // --- AZIONE UPLOAD ---
@@ -53,7 +140,7 @@ export class App {
           const a = document.createElement('a');
           a.href = url;
           // Nome del file suggerito
-          a.download = `Eni_Sustainability_Report-${this.yearToDownload}.pdf`; 
+          a.download = `Eni_Sustainability_Report-${this.yearToDownload}.pdf`;
           document.body.appendChild(a);
           a.click(); // Simula il click
           document.body.removeChild(a); // Pulisce il DOM
