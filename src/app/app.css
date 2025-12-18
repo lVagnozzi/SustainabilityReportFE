@@ -1,0 +1,130 @@
+/* RESET: Rimuove margini e padding di default dai browser */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* BODY: Impostazioni tipografiche generali */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9f9f9; /* Sfondo chiaro per leggibilità */
+    color: #333;
+    line-height: 1.6;
+}
+
+/* HEADER: Stile scuro con accenti gialli (Branding Eni) */
+header {
+    background-color: #222; 
+    color: white;
+    padding: 2rem 0;
+    border-bottom: 5px solid #ffce00; /* Linea gialla distintiva */
+    text-align: center;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.logo .highlight {
+    color: #ffce00; /* Giallo istituzionale */
+    font-weight: normal;
+}
+
+/* CONTAINER: Gestisce la larghezza massima del contenuto e la centratura */
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+/* INTRO: Box bianco con bordo laterale colorato */
+.intro {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Ombra leggera */
+    margin-bottom: 30px;
+    border-left: 5px solid #ffce00;
+}
+
+/* REPORT GRID: Utilizzo di FLEXBOX per il layout responsive */
+.report-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; /* Permette alle card di andare a capo su schermi piccoli */
+    justify-content: space-between;
+}
+
+/* CARD: Stile delle singole schede di download */
+.report-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    flex: 1; /* Le card si dividono equamente lo spazio disponibile */
+    min-width: 280px; /* Larghezza minima prima di andare a capo */
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.report-card:hover {
+    transform: translateY(-5px); /* Effetto sollevamento al passaggio del mouse */
+}
+
+.card-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.desc {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 20px;
+    min-height: 60px; /* Altezza minima per allineare i bottoni */
+}
+
+.btn-download {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #ffce00;
+    color: #222;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: background-color 0.3s;
+}
+
+.btn-upload {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #ffce00;
+    color: #222;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: background-color 0.3s;
+}
+
+.btn-download:hover {
+    background-color: #e6b800; /* Cambio colore all'hover per feedback utente */
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    font-size: 0.8rem;
+    color: #888;
+    border-top: 1px solid #ddd;
+}
+
+.eni-logo {
+    height: 100px; /* Regola l'altezza a piacere */
+    width: auto;  /* Mantiene le proporzioni */
+    align-items: left;
+}
