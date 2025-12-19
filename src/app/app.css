@@ -2,14 +2,11 @@
    1. SETUP GENERALE & HOST
    ========================================= */
 
-
-
-/*<app-root>*/
 :host {
     display: block;
-    min-height: 100vh; /* Occupa almeno tutta l'altezza dello schermo */
+    min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #222; /* Sfondo scuro per tutta l'app */
+    background-color: #222;
     color: #333;
     line-height: 1.6;
 }
@@ -19,7 +16,7 @@
    ========================================= */
 
 header {
-    background-color: rgb(4,8,50); /*rgb(4,8,50)*/ 
+    background-color: rgb(4,8,50);  
     color: white;
     border-bottom: 5px solid #ffce00;
     text-align: center;
@@ -151,7 +148,7 @@ header {
    5. MODAL D'UPLOAD
    ========================================= */
 
-/* Overlay con effetto sfocatura (Glassmorphism leggero) */
+/* Overlay con effetto sfocatura*/
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -159,7 +156,7 @@ header {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.75); /* Più scuro per focus assoluto */
-    backdrop-filter: blur(4px); /* Sfoca lo sfondo per modernità */
+    backdrop-filter: blur(4px); /* Sfoca lo sfondo */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -167,7 +164,7 @@ header {
     animation: fadeIn 0.3s ease-out;
 }
 
-/* La scatola del Modal */
+
 .modal-content {
     background: #fff;
     width: 90%;
@@ -175,7 +172,7 @@ header {
     padding: 0; /* Padding gestito internamente */
     border-radius: 4px; /* Angoli poco arrotondati, più "corporate" */
     box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-    border-top: 6px solid #ffce00; /* IL TOCCO ENI: La linea gialla in alto */
+    border-top: 6px solid #ffce00;
     position: relative;
     overflow: hidden;
 }
@@ -249,7 +246,7 @@ header {
     box-shadow: inset 3px 0 0 #ffce00; /* Linea gialla interna a sinistra */
 }
 
-/* Footer & Bottoni */
+/* Footer e Bottoni */
 .modal-footer {
     padding: 20px 25px;
     background-color: #fff;
@@ -259,7 +256,7 @@ header {
     gap: 15px;
 }
 
-/* Bottone Annulla (Minimal) */
+/* Bottone Annulla*/
 .btn-cancel {
     background: transparent;
     border: 1px solid #ccc;
@@ -277,10 +274,10 @@ header {
     color: #000;
 }
 
-/* Bottone Conferma (Brand Identity) */
+/* Bottone Conferma */
 .btn-confirm {
     background-color: #ffce00; /* Giallo Eni */
-    color: #000; /* Testo Nero */
+    color: #222; 
     border: none;
     padding: 10px 30px;
     font-weight: 700;
@@ -288,11 +285,11 @@ header {
     letter-spacing: 0.5px;
     cursor: pointer;
     transition: transform 0.2s, background-color 0.2s;
-    border-radius: 2px; /* Quasi squadrato */
+    border-radius: 2px; 
 }
 
 .btn-confirm:hover {
-    background-color: #e5b800; /* Giallo leggermente più scuro */
+    background-color: #e5b800; 
     transform: translateY(-1px);
 }
 

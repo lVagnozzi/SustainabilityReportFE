@@ -44,7 +44,7 @@ export class App {
     this.message = '';
   }
 
-  // Aggiungi una variabile per gestire lo spinner/loading
+  // Aggiungo una variabile per gestire il loading
 isLoading: boolean = false;
 
 // app.ts
@@ -55,21 +55,21 @@ openDownloadModal() {
     this.availableYears = [];
 
     this.reportService.getAvailableYears().subscribe({
-      next: (years: number[]) => { // <--- Ora ricevi direttamente numeri!
-        
-        // 1. FILTRA E BASTA (Niente più .map)
+      next: (years: number[]) => { 
+
+        // 1. filtro in modo da poter escludere l'anno 2024 (ovvero il più recente)
         const filteredYears = years.filter(y => y !== 2024);
 
-        // 2. Rimuovi duplicati (sempre buona norma) e assegna
+        // 2. Rimuovi duplicati e assegna
         this.availableYears = [...new Set(filteredYears)];
 
-        // 3. Seleziona il primo di default
+        // 3. Seleziono il primo di default
         if (this.availableYears.length > 0) {
           this.archiveYear = this.availableYears[0];
         }
 
         this.message = '';
-        this.cdr.detectChanges(); // Sempre utile per aggiornare subito la UI
+        this.cdr.detectChanges(); // per aggiornare subito la UI
       },
       error: (err) => {
         console.error(err);
