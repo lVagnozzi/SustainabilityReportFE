@@ -139,7 +139,6 @@ onUpload() {
           a.click(); // Simula il click
           document.body.removeChild(a); // Pulisce il DOM
           window.URL.revokeObjectURL(url); // Libera memoria
-          this.message = "Download avviato!";
         },
         error: (err) => {
           console.error(err);
