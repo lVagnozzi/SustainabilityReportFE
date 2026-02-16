@@ -16,6 +16,7 @@ export class App {
 
   protected readonly title = signal('SustainabilityReportFE');
 
+
   selectedFile: File | null = null;
   yearToUpload: number = 2024; // Default
   yearToDownload: number = 2024;
@@ -23,7 +24,7 @@ export class App {
   isModalOpen: boolean = false;
   isDownloadModalOpen: boolean = false;
   archiveYear: number = 2023;
-  availableYears: number[] = [];
+  availableYears = signal<number[]>([]);
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -51,31 +52,17 @@ isLoading: boolean = false;
 
 openDownloadModal() {
     this.isDownloadModalOpen = true;
-    this.message = 'Caricamento...';
-    this.availableYears = [];
 
     this.reportService.getAvailableYears().subscribe({
-      next: (years: number[]) => { 
+        next: (years) => {
+            const filtered = years.filter(y => y !== 2024);
+            // Aggiornare un signal notifica istantaneamente la UI
+            this.availableYears.set([...new Set(filtered)]);
 
-        // 1. filtro in modo da poter escludere l'anno 2024 (ovvero il più recente)
-        const filteredYears = years.filter(y => y !== 2024);
-
-        // 2. Rimuovi duplicati e assegna
-        this.availableYears = [...new Set(filteredYears)];
-
-        // 3. Seleziono il primo di default
-        if (this.availableYears.length > 0) {
-          this.archiveYear = this.availableYears[0];
+            if (this.availableYears().length > 0) {
+                this.archiveYear = this.availableYears()[0];
+            }
         }
-
-        this.message = '';
-        this.cdr.detectChanges(); // per aggiornare subito la UI
-      },
-      error: (err) => {
-        console.error(err);
-        this.message = 'Errore nel caricamento.';
-        this.cdr.detectChanges();
-      }
     });
 }
 
@@ -111,24 +98,31 @@ openDownloadModal() {
   }
 
   // --- AZIONE UPLOAD ---
-  onUpload() {
-    if (!this.selectedFile) {
-      this.message = "Seleziona prima un file!";
-      return;
-    }
-
-    this.reportService.uploadReport(this.selectedFile, this.yearToUpload)
-      .subscribe({
-        next: (responseMsg) => {
-          this.message = "Successo: " + responseMsg;
-          this.selectedFile = null; // Reset
-        },
-        error: (err) => {
-          console.error(err);
-          this.message = "Errore durante l'upload.";
-        }
-      });
+// --- AZIONE UPLOAD ---
+onUpload() {
+  if (!this.selectedFile) {
+    this.message = "Seleziona prima un file!";
+    alert("Per favore, seleziona un file prima di procedere."); // Optional: alert for validation
+    return;
   }
+
+  this.reportService.uploadReport(this.selectedFile, this.yearToUpload)
+    .subscribe({
+      next: (responseMsg) => {
+        this.message = "Successo: " + responseMsg;
+        alert(`Caricamento completato con successo per l'anno ${this.yearToUpload}!`);
+        this.selectedFile = null;
+
+
+      },
+      error: (err) => {
+        console.error(err);
+        this.message = "Errore durante l'upload.";
+        alert("Si è verificato un errore durante il caricamento del file.");
+      }
+    });
+    this.closeModal();
+}
 
   // --- AZIONE DOWNLOAD ---
   onDownload() {

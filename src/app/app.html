@@ -23,7 +23,7 @@
             <div class="card-icon">📄</div>
             <h3>Eni for 2024</h3>
             <p class="desc">A Just Transition - Executive Summary.</p>
-            <a href="#" class="btn-download" download>Scarica PDF</a>
+            <a href="javascript:void(0)" class="btn-download" (click)="onDownload()">Scarica PDF</a>
             <div class="archive-link-wrapper">
                 <a class="link-archive" (click)="openDownloadModal()">Vedi anni precedenti</a>
             </div>
@@ -86,8 +86,8 @@
             <div class="form-group">
                 <label for="archiveYear">Seleziona Anno:</label>
                 <select id="archiveYear" [(ngModel)]="archiveYear" class="input-styled">
-                    @for (year of availableYears; track year) {
-                        <option [ngValue]="year">{{ year }}</option>
+                    @for (year of availableYears(); track year) {
+                        <option [value]="year">{{ year }}</option>
                     }
 
                     @if (availableYears.length === 0) {
